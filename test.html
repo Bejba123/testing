@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>sudo rm -rf --no-preserve-root</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #e9eef7;
+            padding: 20px;
+            color: #333;
+        }
+        h1 {
+            color: #1a73e8;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+        .container {
+            display: flex;
+            gap: 30px;
+            width: 100%;
+            max-width: 1200px;
+        }
+        .panel {
+            flex: 1;
+            padding: 25px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        h2 {
+            color: #4285f4;
+            margin-top: 0;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #fbbc05;
+            font-size: 1.5em;
+        }
+        textarea {
+            width: 100%;
+            height: 300px;
+            padding: 15px;
+            box-sizing: border-box;
+            border: 1px solid #c8d1e0;
+            border-radius: 8px;
+            font-size: 20px;
+            font-family: 'Roboto Mono', monospace;
+            resize: none;
+            transition: border-color 0.3s;
+        }
+        textarea:focus {
+            border-color: #1a73e8;
+            outline: none;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>sudo rm -rf --no-preserve-root /</h1>
+
+    <div class="container">
+        <div class="panel">
+            <h2>Polskie</h2>
+            <textarea id="inputPolish" placeholder="Wpisz tekst po polsku..." oninput="translateToCyrillic(this.value)"></textarea>
+        </div>
+
+        <div class="panel">
+            <h2>Cyrylica</h2>
+            <textarea id="inputCyrillic" placeholder="Wpisz tekst w cyrylicy..." oninput="translateToPolish(this.value)"></textarea>
+        </div>
+    </div>
+
+    <script>
+        // --- KLUCZ TŁUMACZĄCY (Zgodny z Twoim niestandardowym, unikalnym zestawieniem) ---
+        // Format: [Litera Polska, Litera Cyrylicy]
+        const map = [
+            ['A', 'Ч'], ['Ą', 'Ь'], ['B', 'Ф'], ['C', 'Ю'], ['Ć', 'У'], 
+            ['D', 'Щ'], ['E', 'Ц'], ['Ę', 'Ъ'], ['F', 'Ї'], ['G', 'Й'], 
+            ['H', 'Ё'], ['I', 'Г'], ['J', 'П'], ['K', 'А'], ['L', 'Л'], 
+            ['Ł', 'О'], ['M', 'М'], ['N', 'Н'], ['Ń', 'Э'], ['O', 'Ы'], 
+            ['Ó', 'Б'], ['P', 'Р'], ['Q', 'Е'], ['R', 'Д'], ['S', 'Ў'], 
+            ['Ś', 'Ж'], ['T', 'З'], ['U', 'С'], ['V', 'В'], ['W', 'К'], 
+            ['X', 'Ш'], ['Y', 'Х'], ['Z', 'Я'], ['Ź', 'Т'], ['Ż', 'С']
+        ];
+
+        // Tworzenie obiektów mapowania dla obu kierunków
+        const plToCyrMap = new Map();
+        const cyrToPlMap = new Map();
+
+        map.forEach(([pl, cyr]) => {
+            // Mapowanie dla dużych liter
+            plToCyrMap.set(pl, cyr);
+            cyrToPlMap.set(cyr, pl);
+
+            // Mapowanie dla małych liter
+            plToCyrMap.set(pl.toLowerCase(), cyr.toLowerCase());
+            cyrToPlMap.set(cyr.toLowerCase(), pl.toLowerCase());
+        });
+
+        // --- TŁUMACZENIE: POLSKI -> CYRYLICA ---
+        function translateToCyrillic(text) {
+            const result = Array.from(text).map(char => {
+                return plToCyrMap.get(char) || char;
+            }).join('');
+            
+            // Wprowadza wynik do drugiego pola
+            document.getElementById('inputCyrillic').value = result;
+            
+            // Opcjonalnie: Utrzymuje tylko jedno pole aktywne
+            if (text.length > 0) {
+                document.getElementById('inputCyrillic').removeEventListener('input', translateToPolish);
+            } else {
+                document.getElementById('inputCyrillic').addEventListener('input', (e) => translateToPolish(e.target.value));
+            }
+        }
+
+        // --- TŁUMACZENIE: CYRYLICA -> POLSKI ---
+        function translateToPolish(text) {
+            const result = Array.from(text).map(char => {
+                return cyrToPlMap.get(char) || char;
+            }).join('');
+            
+            // Wprowadza wynik do pierwszego pola
+            document.getElementById('inputPolish').value = result;
+            
+             // Opcjonalnie: Utrzymuje tylko jedno pole aktywne
+            if (text.length > 0) {
+                document.getElementById('inputPolish').removeEventListener('input', translateToCyrillic);
+            } else {
+                document.getElementById('inputPolish').addEventListener('input', (e) => translateToCyrillic(e.target.value));
+            }
+        }
+    
+        // Inicjalizacja nasłuchiwania dla obu pól
+        document.getElementById('inputPolish').addEventListener('input', (e) => translateToCyrillic(e.target.value));
+        document.getElementById('inputCyrillic').addEventListener('input', (e) => translateToPolish(e.target.value));
+    </script>
+
+</body>
+</html>
+
