@@ -3,142 +3,239 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>sudo rm -rf --no-preserve-root</title>
+    <title>Sklepik Serwerowy - Wzór Serwerowy z Walidacją</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
+        /* Styl Ciemnego Motywu */
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            background-color: #e9eef7;
-            padding: 20px;
-            color: #333;
-        }
-        h1 {
-            color: #1a73e8;
-            margin-bottom: 30px;
-            font-size: 2.5em;
+            font-family: 'Roboto', sans-serif;
+            background-color: #0d1117; 
+            color: #c9d1d9; 
+            margin: 0;
+            padding: 20px 10px;
+            text-align: center;
         }
         .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: #161b22; 
+            padding: 30px 15px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5); 
+            border: 1px solid #30363d;
+        }
+
+        /* Nowa klasa dla gradientowego napisu */
+        .gradient-title {
+            font-size: 3em; /* Duży rozmiar */
+            font-weight: 900; /* Ekstra pogrubienie */
+            margin-bottom: 10px;
+            
+            /* KLUCZOWE WŁAŚCIWOŚCI DLA EFEKTU GRADIENTU */
+            background: linear-gradient(90deg, #23b7ff, #7a23ff); /* Gradient: Niebieski -> Fioletowy */
+            -webkit-background-clip: text; /* Wymagane dla przeglądarek opartych na Webkit (Chrome/Safari) */
+            background-clip: text;
+            color: transparent; /* Sprawia, że sam tekst jest przezroczysty, a widać gradient */
+        }
+        
+        h1 {
+            /* Zmieniamy h1, aby służył jako podtytuł lub opis */
+            color: #c9d1d9; /* Jasny szary, żeby nie konkurował z gradientem */
+            border-bottom: 2px solid #30363d;
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+            font-weight: 400; /* Mniej pogrubiony */
+            font-size: 1.5em; /* Mniejszy rozmiar */
+            text-transform: uppercase;
+        }
+        .test-note {
+            background-color: #ffc107; 
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 25px;
+            font-weight: bold;
+            color: #161b22;
+        }
+        .error-message {
+            color: #f85149; 
+            font-weight: bold;
+            margin-top: 10px;
+            margin-bottom: 15px;
+            height: 20px; 
+        }
+        .vip-offer {
             display: flex;
-            gap: 30px;
-            width: 100%;
-            max-width: 1200px;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
         }
-        .panel {
-            flex: 1;
-            padding: 25px;
-            background-color: #ffffff;
-            border-radius: 12px;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-        }
-        h2 {
-            color: #4285f4;
-            margin-top: 0;
-            padding-bottom: 10px;
-            border-bottom: 3px solid #fbbc05;
-            font-size: 1.5em;
-        }
-        textarea {
-            width: 100%;
-            height: 300px;
-            padding: 15px;
-            box-sizing: border-box;
-            border: 1px solid #c8d1e0;
+        .package {
+            background-color: #1e242c; 
             border-radius: 8px;
-            font-size: 20px;
-            font-family: 'Roboto Mono', monospace;
-            resize: none;
-            transition: border-color 0.3s;
+            padding: 20px;
+            width: 100%;
+            max-width: 240px; 
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid #30363d;
         }
-        textarea:focus {
-            border-color: #1a73e8;
-            outline: none;
+        .package:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(35, 183, 255, 0.2);
+        }
+        .package h2 {
+            margin-top: 0;
+            color: #23b7ff;
+            font-size: 1.5em;
+            text-transform: uppercase;
+        }
+        .package h3 {
+             color: #99aab5;
+             margin: 5px 0 15px 0;
+        }
+        .package p {
+            font-size: 2.5em;
+            font-weight: 700;
+            color: #4CAF50; 
+            margin: 10px 0;
+        }
+        .policy-box {
+            margin: 25px 0 20px 0;
+            padding: 15px;
+            background-color: #240a0a; 
+            border: 1px solid #5a2020;
+            color: #f8d7da;
+            border-radius: 5px;
+            text-align: left;
+            font-size: 0.9em;
+        }
+        .input-area {
+            margin-bottom: 10px;
+        }
+        .input-area input {
+            padding: 12px;
+            border: 1px solid #30363d;
+            border-radius: 4px;
+            width: 90%;
+            max-width: 350px;
+            font-size: 1em;
+            background-color: #2d333b;
+            color: #e0e0e0;
+        }
+        .paypal-button {
+            background-color: #ffc439; 
+            color: #003087; 
+            padding: 14px 30px;
+            border-radius: 5px; 
+            cursor: pointer;
+            display: inline-block;
+            font-weight: 700;
+            text-decoration: none;
+            margin-top: 20px;
+            border: none;
+            font-size: 1.1em;
+            width: 90%; 
+            max-width: 200px;
+            transition: background-color 0.2s, box-shadow 0.3s;
+        }
+        .paypal-button:hover {
+            background-color: #e0ac2b;
+            box-shadow: 0 0 15px rgba(255, 196, 57, 0.6);
+        }
+        @media (max-width: 600px) {
+            .vip-offer {
+                flex-direction: column;
+                align-items: center;
+            }
         }
     </style>
 </head>
 <body>
 
-    <h1>sudo rm -rf --no-preserve-root /</h1>
-
-    <div class="container">
-        <div class="panel">
-            <h2>Polskie</h2>
-            <textarea id="inputPolish" placeholder="Wpisz tekst po polsku..." oninput="translateToCyrillic(this.value)"></textarea>
-        </div>
-
-        <div class="panel">
-            <h2>Cyrylica</h2>
-            <textarea id="inputCyrillic" placeholder="Wpisz tekst w cyrylicy..." oninput="translateToPolish(this.value)"></textarea>
-        </div>
+<div class="container">
+    <div class="test-note">
+        UWAGA: Strona jest obecnie w **BETA TESTACH**. Przycisk działa jako **test walidacji nicku**.
     </div>
 
-    <script>
-        // --- KLUCZ TŁUMACZĄCY (Zgodny z Twoim niestandardowym, unikalnym zestawieniem) ---
-        // Format: [Litera Polska, Litera Cyrylicy]
-        const map = [
-            ['A', 'Ч'], ['Ą', 'Ь'], ['B', 'Ф'], ['C', 'Ю'], ['Ć', 'У'], 
-            ['D', 'Щ'], ['E', 'Ц'], ['Ę', 'Ъ'], ['F', 'Ї'], ['G', 'Й'], 
-            ['H', 'Ё'], ['I', 'Г'], ['J', 'П'], ['K', 'А'], ['L', 'Л'], 
-            ['Ł', 'О'], ['M', 'М'], ['N', 'Н'], ['Ń', 'Э'], ['O', 'Ы'], 
-            ['Ó', 'Б'], ['P', 'Р'], ['Q', 'Е'], ['R', 'Д'], ['S', 'Ў'], 
-            ['Ś', 'Ж'], ['T', 'З'], ['U', 'С'], ['V', 'В'], ['W', 'К'], 
-            ['X', 'Ш'], ['Y', 'Х'], ['Z', 'Я'], ['Ź', 'Т'], ['Ż', 'С']
-        ];
+    <div class="gradient-title">Nazwa serwera</div>
+    <div class="gradient-title">Sklepik Serwera</div>
 
-        // Tworzenie obiektów mapowania dla obu kierunków
-        const plToCyrMap = new Map();
-        const cyrToPlMap = new Map();
-
-        map.forEach(([pl, cyr]) => {
-            // Mapowanie dla dużych liter
-            plToCyrMap.set(pl, cyr);
-            cyrToPlMap.set(cyr, pl);
-
-            // Mapowanie dla małych liter
-            plToCyrMap.set(pl.toLowerCase(), cyr.toLowerCase());
-            cyrToPlMap.set(cyr.toLowerCase(), pl.toLowerCase());
-        });
-
-        // --- TŁUMACZENIE: POLSKI -> CYRYLICA ---
-        function translateToCyrillic(text) {
-            const result = Array.from(text).map(char => {
-                return plToCyrMap.get(char) || char;
-            }).join('');
-            
-            // Wprowadza wynik do drugiego pola
-            document.getElementById('inputCyrillic').value = result;
-            
-            // Opcjonalnie: Utrzymuje tylko jedno pole aktywne
-            if (text.length > 0) {
-                document.getElementById('inputCyrillic').removeEventListener('input', translateToPolish);
-            } else {
-                document.getElementById('inputCyrillic').addEventListener('input', (e) => translateToPolish(e.target.value));
-            }
-        }
-
-        // --- TŁUMACZENIE: CYRYLICA -> POLSKI ---
-        function translateToPolish(text) {
-            const result = Array.from(text).map(char => {
-                return cyrToPlMap.get(char) || char;
-            }).join('');
-            
-            // Wprowadza wynik do pierwszego pola
-            document.getElementById('inputPolish').value = result;
-            
-             // Opcjonalnie: Utrzymuje tylko jedno pole aktywne
-            if (text.length > 0) {
-                document.getElementById('inputPolish').removeEventListener('input', translateToCyrillic);
-            } else {
-                document.getElementById('inputPolish').addEventListener('input', (e) => translateToCyrillic(e.target.value));
-            }
-        }
+    <h1>ZAKUP RANGI</h1>
     
-        // Inicjalizacja nasłuchiwania dla obu pól
-        document.getElementById('inputPolish').addEventListener('input', (e) => translateToCyrillic(e.target.value));
-        document.getElementById('inputCyrillic').addEventListener('input', (e) => translateToPolish(e.target.value));
-    </script>
+    <div class="policy-box">
+        <strong>⚠️ POLITYKA ZWROTÓW I KOREKTY NICKÓW:</strong><br>
+        Zwroty pieniędzy nie są przyjmowane. **WYJĄTEK:** W przypadku podania błędnej nazwy użytkownika, prosimy o kontakt.
+    </div>
+    
+    <form onsubmit="return validateNickname()">
+
+        <div class="input-area">
+            <label for="nickname" style="display: block; margin-bottom: 10px;">Wpisz swój **Nick Gracza**:</label>
+            <input type="text" id="nickname" name="nickname" placeholder="Nick (zgodny z MC)" required>
+        </div>
+
+        <div id="error-message" class="error-message"></div>
+
+        <div class="vip-offer">
+            
+            <div class="package">
+                <h2>VIP</h2>
+                <h3>14 Dni</h3>
+                <p>10 zł</p>
+                <hr style="border-color: #30363d;">
+                <button type="submit" class="paypal-button" name="package" value="vip_14d">Kup Teraz (10 zł)</button>
+            </div>
+
+            <div class="package">
+                <h2>VIP</h2>
+                <h3>30 Dni</h3>
+                <p>20 zł</p>
+                <hr style="border-color: #30363d;">
+                <button type="submit" class="paypal-button" name="package" value="supervip_30d">Kup Teraz (20 zł)</button>
+            </div>
+
+            <div class="package">
+                <h2>VIP</h2>
+                <h3>60 Dni</h3>
+                <p>35 zł</p>
+                <hr style="border-color: #30363d;">
+                <button type="submit" class="paypal-button" name="package" value="megavip_60d">Kup Teraz (35 zł)</button>
+            </div>
+
+        </div>
+    </form>
+    <div style="margin-top: 40px; font-size: 0.9em; color: #99aab5;">
+        <p>Masz problem z zakupem? Skontaktuj się z nami! | <a href="#" style="color: #23b7ff; text-decoration: none;">Regulamin Sklepu</a></p>
+    </div>
+</div>
+
+<script>
+    function validateNickname() {
+        const nicknameInput = document.getElementById('nickname');
+        const errorMessageDiv = document.getElementById('error-message');
+        const nicknameValue = nicknameInput.value.trim(); 
+
+        if (nicknameValue === "") {
+            errorMessageDiv.textContent = "❌ Proszę podać nazwę użytkownika!";
+            nicknameInput.focus(); 
+            return false; 
+        }
+        
+        const minecraftRegex = /^[a-zA-Z0-9_]{3,16}$/; 
+        if (!minecraftRegex.test(nicknameValue)) {
+            errorMessageDiv.textContent = "❌ Nick musi mieć 3-16 znaków (litery, cyfry, _)";
+            nicknameInput.focus();
+            return false; 
+        }
+
+        errorMessageDiv.textContent = ""; 
+        
+        alert("Walidacja udana! Nick: " + nicknameValue + ". Tutaj nastąpiłoby przekierowanie do płatności.");
+        
+        return false; 
+    }
+</script>
 
 </body>
 </html>
-
